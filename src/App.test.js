@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import App from './App';
 import { fetchShow as mockFetchShow } from './api/fetchShow';
 
-jest.mock('./api/fetchShow');
 
 test('App renders', () => {
     render(<App />);
@@ -13,18 +12,9 @@ test('App renders', () => {
 test('fetches async api call', async () => {
     render(<App />);
 
-    const selectASeason = await screen.findByPlaceholderText(/select an option/i);
+    const selectASeason = await screen.findByText(/select a season/i);
     userEvent.click(selectASeason);
-    
 
-    mockFetchShow.mockResolvedValueOnce({
-        episodes: [
-            {
-            summary: 'hello',
-            name: "Yo",
-            season: 1,
-            image: "http://static.tvmaze.com/uploads/images/original_untouched/67/168918.jpg"
-            }
-        ]
-    });
+    const season1 = await screen.findByText(/season 1/i);
+    expect(season1).toBeInTheDocument();
 });
